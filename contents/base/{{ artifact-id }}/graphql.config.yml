@@ -1,0 +1,3 @@
+# graphql plugin config
+schema: {{ artifact-id }}-graphql/**/*.graphqls
+documents: '**/*.graphql'

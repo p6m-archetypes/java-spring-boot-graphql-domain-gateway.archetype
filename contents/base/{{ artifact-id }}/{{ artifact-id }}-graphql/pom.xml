@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>{{ group-id }}</groupId>
+        <artifactId>{{ artifact-id }}</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>{{ artifact-id }}-graphql</artifactId>
+    <name>{{ project-title }} :: GraphQL</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.netflix.graphql.dgs</groupId>
+            <artifactId>graphql-dgs-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.netflix.graphql.dgs.codegen</groupId>
+            <artifactId>graphql-dgs-codegen-client-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>{{ group-id }}.maven</groupId>
+                <artifactId>{{ org-venture-name }}-graphql-maven-plugin</artifactId>
+                <version>${{'{'}}{{ group-id }}.{{ org-venture-name }}-platform{{'}'}}</version>
+                <configuration>
+                    <generateBoxedTypes>true</generateBoxedTypes>
+                    <generateClient>true</generateClient>
+                    <generateInterfaces>true</generateInterfaces>
+                    <schemaPaths>
+                        <schemaPath>${project.basedir}/src/main/resources/schema/{{ project-name }}.graphqls</schemaPath>
+                    </schemaPaths>
+                    <packageName>{{ root_package }}.graphql</packageName>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
