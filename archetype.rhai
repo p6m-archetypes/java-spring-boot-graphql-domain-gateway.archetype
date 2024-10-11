@@ -20,7 +20,7 @@ context += render(Archetype("java-project-attributes"), ANSWERS + context + #{
     "project-suffix": "Domain Gateway",
 }, render_settings);
 
-context += prompt(render("{{ org-venture-name }}-parent Version:", context), "platform-version", #{
+context += prompt(render("{{ org-solution-name }}-parent Version:", context), "platform-version", #{
     defaults_with: "1.0.0-SNAPSHOT",
 });
 

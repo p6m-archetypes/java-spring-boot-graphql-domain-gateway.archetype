@@ -5,7 +5,7 @@
 
     <parent>
         <groupId>{{ group-id }}</groupId>
-        <artifactId>{{ org-venture-name }}-platform</artifactId>
+        <artifactId>{{ org-solution-name }}-platform</artifactId>
         <version>{{ platform-version }}</version>
     </parent>
 
@@ -20,7 +20,7 @@
     </scm>
 
     <properties>
-        <{{ group-id }}.{{ org-venture-name }}-platform>{{ platform-version }}</{{ group-id }}.{{ org-venture-name }}-platform>{% for service_key in services %}
+        <{{ group-id }}.{{ org-solution-name }}-platform>{{ platform-version }}</{{ group-id }}.{{ org-solution-name }}-platform>{% for service_key in services %}
         {%- set service = services[service_key] %}
         <{{service.group-id}}.{{ service.artifact-id }}.version>{{ platform-version }}</{{service.group-id}}.{{ service.artifact-id}}.version>{% endfor %}
     </properties>
@@ -34,7 +34,7 @@
     </modules>
 
     <dependencies>
-        <!-- Common Testing/Logging Dependencies and Scopes defined in {{ org-venture-name }}-platform. -->
+        <!-- Common Testing/Logging Dependencies and Scopes defined in {{ org-solution-name }}-platform. -->
     </dependencies>
 
     <dependencyManagement>
@@ -49,12 +49,12 @@
             </dependency>{% endfor %}
             <dependency>
                 <groupId>{{ group-id }}</groupId>
-                <artifactId>{{ org-venture-name }}-platform-bom</artifactId>
-                <version>${{'{'}}{{ group-id }}.{{ org-venture-name }}-platform{{'}'}}</version>
+                <artifactId>{{ org-solution-name }}-platform-bom</artifactId>
+                <version>${{'{'}}{{ group-id }}.{{ org-solution-name }}-platform{{'}'}}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- Common Third-Party Dependency Management defined in {{ org-venture-name }}-dependencies. Import Service BOMs here.-->
+            <!-- Common Third-Party Dependency Management defined in {{ org-solution-name }}-dependencies. Import Service BOMs here.-->
         </dependencies>
     </dependencyManagement>
 

@@ -35,8 +35,8 @@
         <plugins>
             <plugin>
                 <groupId>{{ group-id }}.maven</groupId>
-                <artifactId>{{ org-venture-name }}-graphql-maven-plugin</artifactId>
-                <version>${{'{'}}{{ group-id }}.{{ org-venture-name }}-platform{{'}'}}</version>
+                <artifactId>{{ org-solution-name }}-graphql-maven-plugin</artifactId>
+                <version>${{'{'}}{{ group-id }}.{{ org-solution-name }}-platform{{'}'}}</version>
                 <configuration>
                     <generateBoxedTypes>true</generateBoxedTypes>
                     <generateClient>true</generateClient>
