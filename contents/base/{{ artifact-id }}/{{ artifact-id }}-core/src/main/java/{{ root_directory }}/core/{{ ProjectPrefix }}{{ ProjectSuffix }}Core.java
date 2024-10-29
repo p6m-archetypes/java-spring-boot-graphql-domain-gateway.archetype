@@ -73,6 +73,13 @@ public class {{ ProjectPrefix }}{{ ProjectSuffix }}Core {{'{'}}
                                                                  .build());
         return Converters.to{{ entity_key | pascal_case }}(response.get{{ entity_key | pascal_case }}());
     }
+
+    public Boolean delete{{ entity_key | pascal_case }}(String id) {
+        Delete{{ entity_key | pascal_case }}Response response = {{ entity_key | camel_case }}Service.delete{{ entity_key | pascal_case }}(Delete{{ entity_key | pascal_case }}Request.newBuilder()
+                                                                     .setId(id)
+                                                                     .build());
+        return true;
+    }
 {%- endfor %}
 {%- endfor %}
 }

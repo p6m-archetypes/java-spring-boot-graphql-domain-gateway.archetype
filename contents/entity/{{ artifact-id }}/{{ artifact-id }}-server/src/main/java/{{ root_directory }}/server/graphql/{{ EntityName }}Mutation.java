@@ -26,4 +26,9 @@ public class {{ EntityName }}Mutation {
     public {{ EntityName }} update{{ EntityName }}(@InputArgument Update{{ EntityName }}Input update{{ EntityName }}Input) {
         return domainGatewayCore.update{{ EntityName }}(update{{ EntityName }}Input);
     }
+
+    @DgsMutation
+    public Boolean delete{{ EntityName }}(@InputArgument String id) {
+        return domainGatewayCore.delete{{ EntityName }}(id);
+    }
 }

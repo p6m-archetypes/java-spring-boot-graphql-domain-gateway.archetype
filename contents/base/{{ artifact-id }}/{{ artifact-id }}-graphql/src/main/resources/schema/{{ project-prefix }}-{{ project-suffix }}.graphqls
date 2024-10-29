@@ -16,6 +16,7 @@ type Mutation {
 {%- set entity = service.model.entities[entity_key] %}
     create{{ entity_key | pascal_case }}(create{{ entity_key | pascal_case }}Input: Create{{ entity_key | pascal_case }}Input!): {{ entity_key | pascal_case }}!
     update{{ entity_key | pascal_case }}(update{{ entity_key | pascal_case }}Input: Update{{ entity_key | pascal_case }}Input!): {{ entity_key | pascal_case }}!
+    delete{{ entity_key | pascal_case }}(id: ID!): Boolean
 {% endfor %}
 {%- endfor -%}
 }
