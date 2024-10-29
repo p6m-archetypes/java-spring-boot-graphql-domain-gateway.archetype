@@ -25,7 +25,7 @@ type Mutation {
 {%- set entity = service.model.entities[entity_key] %}
 
 input Create{{ entity_key | pascal_case }}Input {
-    id: ID!
+    id: ID
     name: String!
 }
 

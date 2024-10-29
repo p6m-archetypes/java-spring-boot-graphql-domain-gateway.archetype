@@ -1,15 +1,13 @@
 package {{ root_package }}.core;
 
+import com.google.protobuf.StringValue;
 import {{ root_package }}.core.support.Converters;
 {%- for service_key in services -%}
 {% set service = services[service_key] %}
 import {{ service.root_package }}.api.v1.{{ service['ProjectName'] }};
 {%- for entity_key in service.model.entities -%}
 {%- set entity = service.model.entities[entity_key] %}
-import {{ service.root_package }}.grpc.v1.Get{{ entity_key | pascal_case }}Request;
-import {{ service.root_package }}.grpc.v1.Get{{ entity_key | pascal_case }}Response;
-import {{ service.root_package }}.grpc.v1.Get{{ entity_key | pascal_case | pluralize }}Request;
-import {{ service.root_package }}.grpc.v1.Get{{ entity_key | pascal_case | pluralize }}Response;
+import {{ service.root_package }}.grpc.v1.*;
 import {{ root_package }}.graphql.types.{{ entity_key | pascal_case }};
 import {{ root_package }}.graphql.types.Create{{ entity_key | pascal_case }}Input;
 import {{ root_package }}.graphql.types.Update{{ entity_key | pascal_case }}Input;
@@ -62,11 +60,18 @@ public class {{ ProjectPrefix }}{{ ProjectSuffix }}Core {{'{'}}
     }
 
     public {{ entity_key | pascal_case }} create{{ entity_key | pascal_case }}(Create{{ entity_key | pascal_case}}Input {{ entity_key | camel_case }}) {
-        return null;
+        Create{{ entity_key | pascal_case }}Response response = {{ entity_key | camel_case }}Service.create{{ entity_key | pascal_case }}({{ entity_key | pascal_case }}Dto.newBuilder()
+                                                                 .setName({{ entity_key | camel_case }}.getName())
+                                                                 .build());
+        return Converters.to{{ entity_key | pascal_case }}(response.get{{ entity_key | pascal_case }}());
     }
 
     public {{ entity_key | pascal_case }} update{{ entity_key | pascal_case }}(Update{{ entity_key | pascal_case}}Input {{ entity_key | camel_case }}) {
-        return null;
+        Update{{ entity_key | pascal_case }}Response response = {{ entity_key | camel_case }}Service.update{{ entity_key | pascal_case }}({{ entity_key | pascal_case }}Dto.newBuilder()
+                                                                 .setId(StringValue.of({{ entity_key | camel_case }}.getTargetId()))
+                                                                 .setName({{ entity_key | camel_case }}.getName())
+                                                                 .build());
+        return Converters.to{{ entity_key | pascal_case }}(response.get{{ entity_key | pascal_case }}());
     }
 {%- endfor %}
 {%- endfor %}
