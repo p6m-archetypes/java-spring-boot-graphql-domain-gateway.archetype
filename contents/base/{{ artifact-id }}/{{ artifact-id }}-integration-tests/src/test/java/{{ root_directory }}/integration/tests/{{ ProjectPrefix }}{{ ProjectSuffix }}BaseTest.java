@@ -10,8 +10,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import {{ root_package }}.integration.tests.config.IntegrationTestsConfig;
 import {{ root_package }}.server.{{ ProjectPrefix }}{{ ProjectSuffix }}Server;
-import ybor.playground.example_service.client.ExampleServiceClient;
-import ybor.playground.example_service.grpc.v1.ExampleServiceGrpc;
 {%- for service_key in services -%}
 {% set service = services[service_key] %}
 import {{ service.root_package }}.client.{{ service['ProjectName'] }}Client;
