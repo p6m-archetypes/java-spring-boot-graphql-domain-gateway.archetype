@@ -21,7 +21,7 @@ import ybor.playground.platform.test.GrpcMockClientConfigurer;
 @ExtendWith({SpringExtension.class, GrpcMockExtension.class})
 @ContextConfiguration(classes = { IntegrationTestsConfig.class })
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class {{ ProjectPrefix }}{{ ProjectSuffix }}BaseTest {
+abstract class {{ ProjectPrefix }}{{ ProjectSuffix }}BaseTest {
 
     @Autowired
     private {{ ProjectPrefix }}{{ ProjectSuffix }}Server {{ projectPrefix }}{{ ProjectSuffix }};

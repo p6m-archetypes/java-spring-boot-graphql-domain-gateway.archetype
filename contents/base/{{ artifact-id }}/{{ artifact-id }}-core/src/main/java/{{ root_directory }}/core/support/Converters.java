@@ -20,12 +20,11 @@ public class Converters {
 {% set entity = service.model.entities[entity_key] %}
 
     public static {{ entity_key | pascal_case }} to{{ entity_key | pascal_case }}({{ entity_key | pascal_case }}Dto {{ entity_key | camel_case }}Dto) {
-        {{ entity_key | pascal_case }} {{ entity_key | camel_case }} = {{ entity_key | pascal_case }}.newBuilder()
+        return {{ entity_key | pascal_case }}.newBuilder()
                         .id({{ entity_key | camel_case }}Dto.getId()
                                    .getValue())
                         .name({{ entity_key | camel_case }}Dto.getName())
                         .build();
-        return {{ entity_key | camel_case }};
     }
 {%- endfor %}
 {%- endfor %}

@@ -51,7 +51,7 @@ public class {{ ProjectName }}IT extends {{ ProjectName }}BaseTest {
     }
 
     @Test
-    public void test_Get{{ EntityName | pluralize }}() {
+    void test_Get{{ EntityName | pluralize }}() {
         stubGet{{ EntityName | pluralize }}();
         String query = new GraphQLQueryRequest(
             {{ EntityName | pluralize }}GraphQLQuery.newRequest()

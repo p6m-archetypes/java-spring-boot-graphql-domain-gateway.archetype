@@ -3,7 +3,6 @@ package {{ root_package }}.server.graphql;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.InputArgument;
-import com.netflix.graphql.dgs.exceptions.DgsEntityNotFoundException;
 import {{ root_package }}.core.{{ ProjectPrefix }}DomainGatewayCore;
 import {{ root_package }}.graphql.types.{{ EntityName }};
 

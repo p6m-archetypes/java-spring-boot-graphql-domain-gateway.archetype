@@ -16,7 +16,6 @@ import {{ root_package }}.graphql.types.Update{{ entity_key | pascal_case }}Inpu
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class {{ ProjectPrefix }}{{ ProjectSuffix }}Core {{'{'}}
@@ -56,7 +55,7 @@ public class {{ ProjectPrefix }}{{ ProjectSuffix }}Core {{'{'}}
         return response.get{{ entity_key | pascal_case }}List()
                                    .stream()
                                    .map(Converters::to{{ entity_key | pascal_case }})
-                                   .collect(Collectors.toList());
+                                   .toList();
     }
 
     public {{ entity_key | pascal_case }} create{{ entity_key | pascal_case }}(Create{{ entity_key | pascal_case}}Input {{ entity_key | camel_case }}) {
@@ -78,7 +77,7 @@ public class {{ ProjectPrefix }}{{ ProjectSuffix }}Core {{'{'}}
         Delete{{ entity_key | pascal_case }}Response response = {{ entity_key | camel_case }}Service.delete{{ entity_key | pascal_case }}(Delete{{ entity_key | pascal_case }}Request.newBuilder()
                                                                      .setId(id)
                                                                      .build());
-        return true;
+        return "Success".equalsIgnoreCase(response.getMessage());
     }
 {%- endfor %}
 {%- endfor %}
