@@ -15,7 +15,7 @@ import {{ root_package }}.server.{{ ProjectPrefix }}{{ ProjectSuffix }}Server;
 import {{ service.root_package }}.client.{{ service['ProjectName'] }}Client;
 import {{ service.root_package }}.grpc.v1.{{ service['ProjectName'] }}Grpc;
 {%- endfor %}
-import ybor.playground.platform.test.GrpcMockClientConfigurer;
+import {{ group-id }}.platform.test.GrpcMockClientConfigurer;
 
 
 @ExtendWith({SpringExtension.class, GrpcMockExtension.class})

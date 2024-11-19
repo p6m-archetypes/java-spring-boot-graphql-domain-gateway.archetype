@@ -18,7 +18,7 @@
             <artifactId>{{ artifact-id }}-server</artifactId>
             <version>${project.version}</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>{{ artifact-id }}-core</artifactId>
             <version>${project.version}</version>
