@@ -13,13 +13,15 @@ jobs:
       ARTIFACTORY_USERNAME: ${{'{'}}{ secrets.ARTIFACTORY_USERNAME }}
       ARTIFACTORY_IDENTITY_TOKEN: ${{'{'}}{ secrets.ARTIFACTORY_IDENTITY_TOKEN }}
       UPDATE_MANIFEST_TOKEN: ${{'{'}}{ secrets.UPDATE_MANIFEST_TOKEN }}
+    with:
+      ARTIFACTORY_HOSTNAME: ${{'{'}}{ vars.ARTIFACTORY_HOSTNAME }}
 
   generate_subgraph:
     name: Generate Subgraph
     needs: build_and_deploy
     uses: p6m-dev/github-actions/.github/workflows/generate-subgraph-domain-gateway.yaml@main
     with:
-      APPLICATION_IMAGE: p6m.jfrog.io/${{'{'}}{ github.repository_owner }}-docker-local/applications/${{'{'}}{ github.event.repository.name }}-server@${{'{'}}{ needs.build_and_deploy.outputs.digest }}
+      APPLICATION_IMAGE: ${{'{'}}{ vars.ARTIFACTORY_HOSTNAME }}/${{'{'}}{ github.repository_owner }}-docker-local/applications/${{'{'}}{ github.event.repository.name }}-server@${{'{'}}{ needs.build_and_deploy.outputs.digest }}
     secrets:
       SUBGRAPH_PULL_TOKEN: ${{'{'}}{ secrets.SUBGRAPH_PULL_TOKEN }}
       REPOSITORY_PUSH_TOKEN: ${{'{'}}{ secrets.REPOSITORY_PUSH_TOKEN }}
