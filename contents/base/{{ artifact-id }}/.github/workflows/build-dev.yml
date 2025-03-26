@@ -15,6 +15,7 @@ jobs:
       UPDATE_MANIFEST_TOKEN: ${{'{'}}{ secrets.UPDATE_MANIFEST_TOKEN }}
     with:
       ARTIFACTORY_HOSTNAME: ${{'{'}}{ vars.ARTIFACTORY_HOSTNAME }}
+      JAVA_VERSION: "21"
 
   generate_subgraph:
     name: Generate Subgraph

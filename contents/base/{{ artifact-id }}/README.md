@@ -3,6 +3,11 @@
 **// TODO:** Add description of your project's business function.
 
 Generated from the [Java Spring Boot GraphQL Domain Gateway Archetype](https://github.com/p6m-dev/java-spring-boot-graphql-domain-gateway-archetype). 
+[[_TOC_]]
+
+## Prereqs
+Running this service requires JDK 21+ and Maven to be configured with an Artifactory encrypted key.
+For development, be sure to have Docker installed and running locally.
 
 ## Build System
 This project uses [Maven](https://maven.apache.org/) as its build system. Common goals include
