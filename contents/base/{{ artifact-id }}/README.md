@@ -2,7 +2,7 @@
 
 **// TODO:** Add description of your project's business function.
 
-Generated from the [Java Spring Boot GraphQL Domain Gateway Archetype](https://github.com/p6m-dev/java-spring-boot-graphql-domain-gateway-archetype). 
+Generated from the [Java Spring Boot GraphQL Domain Gateway Archetype](https://github.com/p6m-archetypes/java-spring-boot-graphql-domain-gateway-archetype). 
 [[_TOC_]]
 
 ## Prereqs
