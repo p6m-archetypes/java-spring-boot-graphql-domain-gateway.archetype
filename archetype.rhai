@@ -25,7 +25,8 @@ context += set("debug-port", context["service-port"] + 9);
 if ANSWERS.services != () {
     context.services = ANSWERS.services;
 } else {
-    context.services = default_services(context);
+     //context.services = default_services(context);
+     context.services = #{};
 }
 
 if switch_enabled("debug-context") {
