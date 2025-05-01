@@ -25,6 +25,9 @@
         <commons.io.version>2.18.0</commons.io.version>
         <org.springdoc.openapi.starter.version>2.8.5</org.springdoc.openapi.starter.version>
         <org.grpcmock.version>0.15.0</org.grpcmock.version>
+        <com.google.protobuf.protoc.version>4.30.1</com.google.protobuf.protoc.version>
+        <io.grpc.version>1.71.0</io.grpc.version>
+        <guava.version>33.4.0-jre</guava.version>
 
         {%- for service_key in services -%}
         {%- set service = services[service_key] %}
@@ -55,6 +58,7 @@
         <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+        <graphql.maven.plugin.version>1.0.0</graphql.maven.plugin.version>
     </properties>
 
     <modules>
@@ -139,6 +143,21 @@
                 <artifactId>commons-io</artifactId>
                 <version>${commons.io.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${com.google.protobuf.protoc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.grpc</groupId>
+                <artifactId>grpc-protobuf</artifactId>
+                <version>${io.grpc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -207,6 +226,21 @@
                                 </goals>
                             </execution>
                         </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${maven-surefire-plugin.version}</version>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${maven-failsafe-plugin.version}</version>
+                    </plugin>
+                    <plugin>
+                        <groupId>cpd.ybor.maven</groupId>
+                        <artifactId>cpd-ybor-graphql-maven-plugin</artifactId>
+                        <version>${graphql.maven.plugin.version}</version>
                     </plugin>
                 </plugins>
             </build>
