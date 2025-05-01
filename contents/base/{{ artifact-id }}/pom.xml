@@ -238,8 +238,8 @@
                         <version>${maven-failsafe-plugin.version}</version>
                     </plugin>
                     <plugin>
-                        <groupId>cpd.ybor.maven</groupId>
-                        <artifactId>cpd-ybor-graphql-maven-plugin</artifactId>
+                        <groupId>{{ group-id }}.maven</groupId>
+                        <artifactId>{{ org-solution-name }}-graphql-maven-plugin</artifactId>
                         <version>${graphql.maven.plugin.version}</version>
                     </plugin>
                 </plugins>
