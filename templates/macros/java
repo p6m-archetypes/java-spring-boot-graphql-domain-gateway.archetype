@@ -1,0 +1,273 @@
+{% macro core_implementation_methods(entity_key, entity, model, service) -%}
+    public {{ entity_key | pascal_case }} {{ entity_key | camel_case }}(String id) {
+        Get{{ entity_key | pascal_case }}Response response = {{ service.projectName }}.get{{ entity_key | pascal_case }}(Get{{ entity_key | pascal_case }}Request.newBuilder()
+                                                             .setId(id)
+                                                             .build());
+        return Converters.to{{ entity_key | pascal_case }}(response.get{{ entity_key | pascal_case }}());
+    }
+
+    public List<{{ entity_key | pascal_case }}> {{ entity_key | camel_case | pluralize }}() {
+        Get{{ entity_key | pascal_case | pluralize }}Request request = Get{{ entity_key | pascal_case | pluralize }}Request.newBuilder()
+                                                 .setStartPage(0)
+                                                 .setPageSize(10)
+                                                 .build();
+        Get{{ entity_key | pascal_case | pluralize }}Response response = {{ service.projectName }}.get{{ entity_key | pascal_case | pluralize }}(request);
+        return response.get{{ entity_key | pascal_case }}List()
+                                   .stream()
+                                   .map(Converters::to{{ entity_key | pascal_case }})
+                                   .toList();
+    }
+
+    public {{ entity_key | pascal_case }} create{{ entity_key | pascal_case }}(Create{{ entity_key | pascal_case}}Input {{ entity_key | camel_case }}) {
+        Create{{ entity_key | pascal_case }}Response response = {{ service.projectName }}.create{{ entity_key | pascal_case }}({{ entity_key | pascal_case }}Dto.newBuilder()
+                                                                 .setName({{ entity_key | camel_case }}.getName())
+                                                                 .build());
+        return Converters.to{{ entity_key | pascal_case }}(response.get{{ entity_key | pascal_case }}());
+    }
+
+    public {{ entity_key | pascal_case }} update{{ entity_key | pascal_case }}(Update{{ entity_key | pascal_case}}Input {{ entity_key | camel_case }}) {
+        Update{{ entity_key | pascal_case }}Response response = {{ service.projectName }}.update{{ entity_key | pascal_case }}({{ entity_key | pascal_case }}Dto.newBuilder()
+                                                                 .setId(StringValue.of({{ entity_key | camel_case }}.getTargetId()))
+                                                                 .setName({{ entity_key | camel_case }}.getName())
+                                                                 .build());
+        return Converters.to{{ entity_key | pascal_case }}(response.get{{ entity_key | pascal_case }}());
+    }
+
+    public Boolean delete{{ entity_key | pascal_case }}(String id) {
+        Delete{{ entity_key | pascal_case }}Response response = {{ service.projectName }}.delete{{ entity_key | pascal_case }}(Delete{{ entity_key | pascal_case }}Request.newBuilder()
+                                                                     .setId(id)
+                                                                     .build());
+        return "Success".equalsIgnoreCase(response.getMessage());
+    }
+{%- endmacro %}
+
+{% macro core_implementation_methods_defaults(entity_key, entity, model) -%}
+    public {{ entity_key | pascal_case }}{{ entity_key | camel_case }}(String id) {
+        return {{ entity_key | pascal_case }}.newBuilder()
+            .id(id)
+            .name("Test 1")
+            .build();
+    }
+
+    public List<{{ entity_key | pascal_case }}> {{ entity_key | camel_case | pluralize }}() {
+        return List.of(
+            {{ entity_key | pascal_case }}.newBuilder()
+                .id(UUID.randomUUID().toString())
+                .name("Test 1")
+                .build(),
+            {{ entity_key | pascal_case }}.newBuilder()
+                .id(UUID.randomUUID().toString())
+                .name("Test 2")
+                .build()
+        );
+    }
+
+    public {{ entity_key | pascal_case }}create{{ entity_key | pascal_case }}(Create{{ entity_key | pascal_case}}Input input) {
+        return {{ entity_key | pascal_case }}.newBuilder()
+            .id(UUID.randomUUID().toString())
+            .name(input.getName())
+            .build();
+    }
+
+    public {{ entity_key | pascal_case }}update{{ entity_key | pascal_case }}(Update{{ entity_key | pascal_case}}Input input) {
+        return {{ entity_key | pascal_case }}.newBuilder()
+            .id(input.getTargetId())
+            .name(input.getName())
+            .build();
+    }
+
+    public Boolean delete{{ entity_key | pascal_case }}(String id) {
+        return true;
+    }
+{%- endmacro %}
+
+{% macro integration_test_methods(entity_key, entity, model, service) -%}
+    @Test
+    void test_Get{{ entity_key | pascal_case }}ById() {
+        stubGet{{ entity_key | pascal_case }}();
+        String query = new GraphQLQueryRequest(
+            {{ entity_key | pascal_case }}GraphQLQuery.newRequest()
+                               .id(id)
+                               .build(),
+            new {{ entity_key | pascal_case }}ProjectionRoot()
+                .id()
+                .name()
+        ).serialize();
+
+        logger.info(query);
+
+        {{ entity_key | pascal_case }} {{ entity_key | camel_case }}  = queryExecutor.executeAndExtractJsonPathAsObject(query,
+            "data" + ".{{ entity_key | camel_case }} ", {{ entity_key | pascal_case }}.class);
+
+        assertThat({{ entity_key | camel_case }} .getId()).isEqualTo(id);
+        assertThat({{ entity_key | camel_case }} .getName()).isEqualTo(name);
+    }
+
+    @Test
+    void test_Get{{ entity_key | pascal_case | pluralize }} () {
+        stubGet{{ entity_key | pascal_case | pluralize }} ();
+        String query = new GraphQLQueryRequest(
+            {{ entity_key | pascal_case | pluralize }}GraphQLQuery.newRequest()
+                               .build(),
+            new {{ entity_key | pascal_case }}ProjectionRoot()
+                .id()
+                .name()
+        ).serialize();
+
+        logger.info(query);
+
+        List<{{ entity_key | pascal_case }}> {{ entity_key | camel_case | pluralize }} = queryExecutor.executeAndExtractJsonPathAsObject(query,
+            "data" + ".{{ entity_key | camel_case | pluralize }}", {{ entity_key | upper_case }}_LIST_TYPEREF);
+
+        assertThat({{ entity_key | camel_case | pluralize }}).hasSize(3);
+    }
+
+    @Test
+    void test_Create{{ entity_key | pascal_case }}() {
+        stubCreate{{ entity_key | pascal_case }}();
+        String query = new GraphQLQueryRequest(
+            Create{{ entity_key | pascal_case }}GraphQLQuery.newRequest()
+                                     .create{{ entity_key | pascal_case }}Input(Create{{ entity_key | pascal_case }}Input.newBuilder()
+                                                                           .name(name)
+                                                                           .build())
+                                     .build(),
+            new {{ entity_key | pascal_case }}ProjectionRoot()
+                .id()
+                .name()
+        ).serialize();
+
+        logger.info(query);
+
+        {{ entity_key | pascal_case }} {{ entity_key | camel_case }}  = queryExecutor.executeAndExtractJsonPathAsObject(query,
+            "data" + ".create{{ entity_key | pascal_case }}", {{ entity_key | pascal_case }}.class);
+
+        assertThat({{ entity_key | camel_case }} .getId()).isEqualTo(id);
+        assertThat({{ entity_key | camel_case }} .getName()).isEqualTo(name);
+
+        verifyThat(
+            calledMethod(getCreate{{ entity_key | pascal_case }}Method())
+                .withStatusOk()
+                .withRequest({{ entity_key | pascal_case }}Dto.newBuilder()
+                                       .setName(name)
+                                       .build()));
+    }
+
+    @Test
+    void test_Update{{ entity_key | pascal_case }}() {
+        stubUpdate{{ entity_key | pascal_case }}();
+        String query = new GraphQLQueryRequest(
+            Update{{ entity_key | pascal_case }}GraphQLQuery.newRequest()
+                                     .update{{ entity_key | pascal_case }}Input(Update{{ entity_key | pascal_case }}Input.newBuilder()
+                                                                           .targetId(id)
+                                                                           .name(name + "_updated")
+                                                                           .build())
+                                     .build(),
+            new {{ entity_key | pascal_case }}ProjectionRoot()
+                .id()
+                .name()
+        ).serialize();
+
+        logger.info(query);
+
+        {{ entity_key | pascal_case }} {{ entity_key | camel_case }}  = queryExecutor.executeAndExtractJsonPathAsObject(query,
+            "data" + ".update{{ entity_key | pascal_case }}", {{ entity_key | pascal_case }}.class);
+
+        assertThat({{ entity_key | camel_case }} .getId()).isEqualTo(id);
+        assertThat({{ entity_key | camel_case }} .getName()).isEqualTo(name + "_updated");
+
+        verifyThat(
+            calledMethod(getUpdate{{ entity_key | pascal_case }}Method())
+                .withStatusOk()
+                .withRequest({{ entity_key | pascal_case }}Dto.newBuilder()
+                                       .setId(StringValue.of(id))
+                                       .setName(name + "_updated")
+                                       .build()));
+    }
+
+    @Test
+    void test_Delete{{ entity_key | pascal_case }}() {
+        stubDelete{{ entity_key | pascal_case }}();
+        String query = new GraphQLQueryRequest(
+            Delete{{ entity_key | pascal_case }}GraphQLQuery.newRequest()
+                                     .id(id)
+                                     .build()).serialize();
+
+        logger.info(query);
+
+        Boolean response = queryExecutor.executeAndExtractJsonPathAsObject(query,
+            "data" + ".delete{{ entity_key | pascal_case }}", Boolean.class);
+
+        assertThat(response).isTrue();
+
+        verifyThat(
+            calledMethod(getDelete{{ entity_key | pascal_case }}Method())
+                .withStatusOk()
+                .withRequest(Delete{{ entity_key | pascal_case }}Request.newBuilder()
+                                                 .setId(id)
+                                                 .build()));
+    }
+
+    private void stubDelete{{ entity_key | pascal_case }}() {
+        stubFor(unaryMethod(getDelete{{ entity_key | pascal_case }}Method()).willReturn(
+            Delete{{ entity_key | pascal_case }}Response.newBuilder()
+                                 .setMessage("Success")
+                                 .build()
+        ));
+
+    }
+
+    protected void stubGet{{ entity_key | pascal_case | pluralize }} () {
+        stubFor(unaryMethod(getGet{{ entity_key | pascal_case | pluralize }}Method()).willReturn(
+            Get{{ entity_key | pascal_case | pluralize }}Response.newBuilder()
+                               .addAll{{ entity_key | pascal_case }}(List.of(
+                                   {{ entity_key | camel_case }}DtoBuilder().setId(StringValue.of(UUID.randomUUID()
+                                                                                .toString()))
+                                                      .build(),
+                                   {{ entity_key | camel_case }}DtoBuilder().setId(StringValue.of(UUID.randomUUID()
+                                                                                .toString()))
+                                                      .build(),
+                                   {{ entity_key | camel_case }}DtoBuilder().setId(StringValue.of(UUID.randomUUID()
+                                                                                .toString()))
+                                                      .build()
+                               ))
+                               .build()
+        ));
+    }
+
+    protected void stubGet{{ entity_key | pascal_case }}() {
+        stubFor(unaryMethod(getGet{{ entity_key | pascal_case }}Method()).willReturn(
+            Get{{ entity_key | pascal_case }}Response.newBuilder()
+                              .set{{ entity_key | pascal_case }}(
+                                  {{ entity_key | camel_case }}DtoBuilder().build()
+                              )
+                              .build()
+        ));
+    }
+
+    protected void stubCreate{{ entity_key | pascal_case }}() {
+        stubFor(unaryMethod(getCreate{{ entity_key | pascal_case }}Method()).willReturn(
+            Create{{ entity_key | pascal_case }}Response.newBuilder()
+                                 .set{{ entity_key | pascal_case }}(
+                                     {{ entity_key | camel_case }}DtoBuilder().build()
+                                 )
+                                 .build()
+        ));
+    }
+
+    protected void stubUpdate{{ entity_key | pascal_case }}() {
+        stubFor(unaryMethod(getUpdate{{ entity_key | pascal_case }}Method()).willReturn(
+            Update{{ entity_key | pascal_case }}Response.newBuilder()
+                                 .set{{ entity_key | pascal_case }}(
+                                     {{ entity_key | camel_case }}DtoBuilder().setName(name + "_updated")
+                                                        .build()
+                                 )
+                                 .build()
+        ));
+    }
+
+    protected {{ entity_key | pascal_case }}Dto.Builder {{ entity_key | camel_case }}DtoBuilder() {
+        return {{ entity_key | pascal_case }}Dto.newBuilder()
+                         .setId(StringValue.of(id))
+                         .setName(name);
+    }
+{%- endmacro %}

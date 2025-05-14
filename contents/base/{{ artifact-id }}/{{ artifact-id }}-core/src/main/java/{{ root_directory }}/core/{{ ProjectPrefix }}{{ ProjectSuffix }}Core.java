@@ -1,13 +1,14 @@
+{% import "macros/java" as java %}
 package {{ root_package }}.core;
 
 import com.google.protobuf.StringValue;
 import {{ root_package }}.core.support.Converters;
 {%- for service_key in services -%}
-{% set service = services[service_key] %}
-import {{ service.root_package }}.api.v1.{{ service['ProjectName'] }};
+{% set service = services[service_key] %}{% if use-default-service == false %}
+import {{ service.root_package }}.api.v1.{{ service['ProjectName'] }};{% endif %}
 {%- for entity_key in service.model.entities -%}
 {%- set entity = service.model.entities[entity_key] %}
-import {{ service.root_package }}.grpc.v1.*;
+{% if use-default-service == false %}import {{ service.root_package }}.grpc.v1.*;{% endif %}
 import {{ root_package }}.graphql.types.{{ entity_key | pascal_case }};
 import {{ root_package }}.graphql.types.Create{{ entity_key | pascal_case }}Input;
 import {{ root_package }}.graphql.types.Update{{ entity_key | pascal_case }}Input;
@@ -16,69 +17,35 @@ import {{ root_package }}.graphql.types.Update{{ entity_key | pascal_case }}Inpu
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 
 @Component
 public class {{ ProjectPrefix }}{{ ProjectSuffix }}Core {{'{'}}
+{% if use-default-service == false %}
     {% for service_key in services %}
     {% set service = services[service_key] -%}
     final {{ service['ProjectName'] }} {{ service['projectName'] }};
-    {%- endfor %}
+    {%- endfor %}{% endif %}
 
-    public {{ ProjectPrefix }}{{ ProjectSuffix }}Core({%- for service_key in services %}
+    public {{ ProjectPrefix }}{{ ProjectSuffix }}Core({% if use-default-service == false %}{%- for service_key in services %}
     {%- set service = services[service_key] %}
         final {{ service['ProjectName'] }} {{ service['projectName'] }}{% if not loop.last %},{% endif %}
-    {%- endfor %}
-    ) {{'{'}}{%- for service_key in services %}
+    {%- endfor %}{% endif %}
+    ) {{'{'}}{% if use-default-service == false %}{%- for service_key in services %}
         {% set service = services[service_key] -%}
         this.{{ service['projectName'] }} = {{ service['projectName'] }};
-        {%- endfor %}
+        {%- endfor %}{% endif %}
     }
 
-{%- for service_key in services -%}
-{%- set service = services[service_key] -%}
-{%- for entity_key in service.model.entities -%}
-{%- set entity = service.model.entities[entity_key] %}
-
-    public {{ entity_key | pascal_case }} {{ entity_key | camel_case }}(String id) {
-        Get{{ entity_key | pascal_case }}Response response = {{ entity_key | camel_case }}Service.get{{ entity_key | pascal_case }}(Get{{ entity_key | pascal_case }}Request.newBuilder()
-                                                             .setId(id)
-                                                             .build());
-        return Converters.to{{ entity_key | pascal_case }}(response.get{{ entity_key | pascal_case }}());
-    }
-
-    public List<{{ entity_key | pascal_case }}> {{ entity_key | camel_case | pluralize }}() {
-        Get{{ entity_key | pascal_case | pluralize }}Request request = Get{{ entity_key | pascal_case | pluralize }}Request.newBuilder()
-                                                 .setStartPage(0)
-                                                 .setPageSize(10)
-                                                 .build();
-        Get{{ entity_key | pascal_case | pluralize }}Response response = {{ entity_key | camel_case }}Service.get{{ entity_key | pascal_case | pluralize }}(request);
-        return response.get{{ entity_key | pascal_case }}List()
-                                   .stream()
-                                   .map(Converters::to{{ entity_key | pascal_case }})
-                                   .toList();
-    }
-
-    public {{ entity_key | pascal_case }} create{{ entity_key | pascal_case }}(Create{{ entity_key | pascal_case}}Input {{ entity_key | camel_case }}) {
-        Create{{ entity_key | pascal_case }}Response response = {{ entity_key | camel_case }}Service.create{{ entity_key | pascal_case }}({{ entity_key | pascal_case }}Dto.newBuilder()
-                                                                 .setName({{ entity_key | camel_case }}.getName())
-                                                                 .build());
-        return Converters.to{{ entity_key | pascal_case }}(response.get{{ entity_key | pascal_case }}());
-    }
-
-    public {{ entity_key | pascal_case }} update{{ entity_key | pascal_case }}(Update{{ entity_key | pascal_case}}Input {{ entity_key | camel_case }}) {
-        Update{{ entity_key | pascal_case }}Response response = {{ entity_key | camel_case }}Service.update{{ entity_key | pascal_case }}({{ entity_key | pascal_case }}Dto.newBuilder()
-                                                                 .setId(StringValue.of({{ entity_key | camel_case }}.getTargetId()))
-                                                                 .setName({{ entity_key | camel_case }}.getName())
-                                                                 .build());
-        return Converters.to{{ entity_key | pascal_case }}(response.get{{ entity_key | pascal_case }}());
-    }
-
-    public Boolean delete{{ entity_key | pascal_case }}(String id) {
-        Delete{{ entity_key | pascal_case }}Response response = {{ entity_key | camel_case }}Service.delete{{ entity_key | pascal_case }}(Delete{{ entity_key | pascal_case }}Request.newBuilder()
-                                                                     .setId(id)
-                                                                     .build());
-        return "Success".equalsIgnoreCase(response.getMessage());
-    }
-{%- endfor %}
-{%- endfor %}
+    {%- for service_key in services -%}
+    {% set service = services[service_key] %}
+    {%- for entity_key in service.model.entities -%}
+    {%- set entity = service.model.entities[entity_key] %}
+    {% if use-default-service == false %}
+    {{ java.core_implementation_methods(entity_key, service.model.entities[entity_key], service.model, service) }}
+    {% else %}
+    {{ java.core_implementation_methods_defaults(entity_key, service.model.entities[entity_key], service.model) }}
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
 }

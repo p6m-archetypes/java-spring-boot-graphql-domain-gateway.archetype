@@ -4,7 +4,7 @@ package {{ root_package }}.core.support;
 {% set service = services[service_key] %}
 {%- for entity_key in service.model.entities -%}
 {%- set entity = service.model.entities[entity_key] %}
-import {{ service.root_package }}.grpc.v1.{{ entity_key | pascal_case }}Dto;
+{% if use-default-service == false %}import {{ service.root_package }}.grpc.v1.{{ entity_key | pascal_case }}Dto;{% endif %}
 import {{ root_package }}.graphql.types.{{ entity_key | pascal_case }};
 {%- endfor %}
 {%- endfor %}
@@ -13,7 +13,7 @@ public class Converters {
 
     private Converters() {
     }
-
+{% if use-default-service == false %}
 {%- for service_key in services -%}
 {% set service = services[service_key] %}
 {%- for entity_key in service.model.entities -%}
@@ -28,5 +28,6 @@ public class Converters {
     }
 {%- endfor %}
 {%- endfor %}
+{% endif %}
 
 }

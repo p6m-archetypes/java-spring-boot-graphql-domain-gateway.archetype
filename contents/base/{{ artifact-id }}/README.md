@@ -26,27 +26,30 @@ regenerate the files from our protobuf definition like this:
 $ mvn -f {{ artifact-id }}-graphql clean generate-sources
 ```
 
-## Running the Server
-This server accepts connections on the following ports:
-- {{ service-port }}: used for application GraphQL Service traffic.
-- {{ management-port }}: used to monitor the application over HTTP (see [Actuator endpoints](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints)).
-
+## Run Server
 Before starting the server, you must first create the application jars:
 ```bash
 $ mvn install
 ```
 
-Next, start the server locally or using Docker. You can verify things are up and running by looking at the [/health](http://localhost:{{ management-port }}/health) endpoint:
-```bash
-$ curl localhost:{{ management-port }}/health
-```
-
-### Local
 From the project root, run
 ```bash
 $ mvn -f {{ artifact-id }}-server spring-boot:run
 ```
-To run the server in a non-blocking fashion, refer to the `spring-boot:start` and `spring-boot:stop` goals.
+
+This server accepts connections on the following ports:
+- {{ service-port }}: used for application GraphQL Service traffic.
+- {{ management-port }}: used to monitor the application over HTTP (see [Actuator endpoints](https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html#actuator.endpoints)).
+
+[GraphiQL](http://localhost:{{ service-port }}/graphiql) - GraphQL Playground
+
+## Management Server
+
+### Health Checks
+You can verify things are up and running by looking at the [/health](http://localhost:{{ management-port }}/health) endpoint:
+```bash
+$ curl localhost:{{ management-port }}/health
+```
 
 ## Runtime Switches
 
