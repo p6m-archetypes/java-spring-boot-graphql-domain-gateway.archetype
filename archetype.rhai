@@ -22,12 +22,7 @@ context += set("service-port", 9000);
 context += set("management-port", context["service-port"] + 1);
 context += set("debug-port", context["service-port"] + 9);
 
-if ANSWERS.services != () {
-    context.services = ANSWERS.services;
-} else {
-     //context.services = default_services(context);
-     context.services = #{};
-}
+context += render(Archetype("grpc-services-integration"), ANSWERS + context , render_settings);
 
 if switch_enabled("debug-context") {
     log(Info, `${archetect::archetype::description()} (${context["project-name"]}) Context:`);
@@ -54,33 +49,6 @@ for service in context.services.values() {
 
 render(Archetype("manifests"), context["artifact-id"], context + #{ "project-suffix": "Domain Gateway"});
 render(Archetype("gitignore"), context["artifact-id"], #{ "ignore": ["java"]});
-
-fn default_services(context) {
-    let yaml = `
----
-${context["project-prefix"]}:
-  ProjectName: ${context["ProjectPrefix"]}Service
-  project-name: ${context["project-prefix"]}-service
-  projectName: ${context["project-prefix"]}Service
-  PROJECT_NAME: ${context["PROJECT_PREFIX"]}_SERVICE
-  group-id: ${context["group-id"]}
-  artifact-id: ${context["project-prefix"]}-service
-  root_package: ${context["org_name"]}.${context["solution_name"]}.${context["project_prefix"]}_service
-  service-port: 5030
-  model:
-    entities:
-      ${context["project-prefix"]}:
-        fields:
-          id:
-            optional: false
-            type: String
-          name:
-            optional: false
-            type: String
-`;
-    let model = from_yaml(yaml);
-    model
-}
 
 // Return context
 context
