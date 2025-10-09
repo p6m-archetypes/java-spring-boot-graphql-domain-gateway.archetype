@@ -1,12 +1,12 @@
 ---
-description: "Java Spring Boot GraphQL Domain Gateway"
-authors: ["Jimmie Fulton"]
+description: "Java Spring Boot GraphQL Domain Gateway, Modular"
+authors: ["Ybor Technology"]
 languages: ["Java"]
-frameworks: ["Spring", "Spring Boot", "GraphQL"]
+frameworks: ["Spring", "Spring Boot", "JPA", "GraphQL"]
 tags: ["Modular", "Service", "Microservice", "GraphQL"]
 
 requires:
-  archetect: 2.0.0-ALPHA.15
+  archetect: 2.0.0
 
 components:
   org-prompts: git@github.com:p6m-archetypes/org-prompts.archetype.git
