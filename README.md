@@ -162,11 +162,48 @@ For complete property relationships, see [archetype.yaml](./archetype.yaml).
 
 This archetype is ideal for:
 
-1. **API Aggregation**: Combining multiple microservices into a unified GraphQL API
-2. **Backend-for-Frontend (BFF)**: Creating client-specific APIs for web, mobile, or desktop applications
-3. **GraphQL Migration**: Gradually migrating from REST/gRPC services to GraphQL
-4. **Domain Gateways**: Organizing APIs by business domain (e.g., Shopping, User Management, Orders)
-5. **Microservices Facades**: Simplifying complex microservice interactions for clients
+1. **API Aggregation**: Combining multiple backend microservices into a unified GraphQL API
+   - Federate gRPC services (products, users, inventory, orders)
+   - Integrate REST APIs (legacy services, third-party APIs)
+   - Compose multiple GraphQL services (schema stitching/federation)
+   - Single endpoint for frontend applications to consume
+
+2. **Backend-for-Frontend (BFF)**: Creating client-specific APIs for different platforms
+   - Web BFF with desktop-optimized queries
+   - Mobile BFF with reduced payload sizes
+   - Desktop BFF with rich data models
+   - Each BFF tailored to specific client needs and network constraints
+
+3. **GraphQL Federation Hub**: Organizing distributed GraphQL schemas
+   - Multiple GraphQL domain services (products, users, orders)
+   - Unified schema with cross-domain relationships
+   - Apollo Federation or schema stitching patterns
+   - Gradual migration from monolithic to federated GraphQL
+
+4. **Microservices Facade**: Simplifying complex service meshes for client consumption
+   - Hide internal service complexity from frontend teams
+   - Handle service orchestration and data composition
+   - Provide consistent error handling and response formats
+   - Circuit breakers and fallbacks for service failures
+
+5. **Transport Translation**: Converting between different API styles
+   - gRPC (internal) → GraphQL (frontend)
+   - REST (legacy) → GraphQL (modern)
+   - Multiple transports → Unified GraphQL interface
+   - Gradual migration path from REST to GraphQL
+
+**Typical Architecture**:
+```
+Frontend Apps (React, Vue, Angular)
+        ↓
+GraphQL Domain Gateway (this archetype)
+        ↓
+Internal Services:
+  - gRPC Services (high-performance)
+  - REST Services (legacy/third-party)
+  - GraphQL Services (domain-specific)
+  - Databases (when needed)
+```
 
 ## 📚 What's Inside
 
