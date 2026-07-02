@@ -10,11 +10,11 @@ jobs:
     name: Build and Deploy
     uses: p6m-dev/github-actions/.github/workflows/build-deploy-maven.yaml@main
     secrets:
-      ARTIFACTORY_USERNAME: ${{'{'}}{ secrets.ARTIFACTORY_USERNAME }}
-      ARTIFACTORY_IDENTITY_TOKEN: ${{'{'}}{ secrets.ARTIFACTORY_IDENTITY_TOKEN }}
-      UPDATE_MANIFEST_TOKEN: ${{'{'}}{ secrets.UPDATE_MANIFEST_TOKEN }}
+      ARTIFACTORY_USERNAME: ${{'{'}}{ secrets.P6M_ARTIFACTORY_USERNAME }}
+      ARTIFACTORY_IDENTITY_TOKEN: ${{'{'}}{ secrets.P6M_ARTIFACTORY_IDENTITY_TOKEN }}
+      UPDATE_MANIFEST_TOKEN: ${{'{'}}{ secrets.P6M_UPDATE_MANIFEST_TOKEN }}
     with:
-      ARTIFACTORY_HOSTNAME: ${{'{'}}{ vars.ARTIFACTORY_HOSTNAME }}
+      ARTIFACTORY_HOSTNAME: ${{'{'}}{ vars.P6M_ARTIFACTORY_HOSTNAME }}
       JAVA_VERSION: "21"
 
   generate_subgraph:
@@ -22,10 +22,10 @@ jobs:
     needs: build_and_deploy
     uses: p6m-dev/github-actions/.github/workflows/generate-subgraph-domain-gateway.yaml@main
     with:
-      APPLICATION_IMAGE: ${{'{'}}{ vars.ARTIFACTORY_HOSTNAME }}/${{'{'}}{ github.repository_owner }}-docker-local/applications/${{'{'}}{ github.event.repository.name }}-server@${{'{'}}{ needs.build_and_deploy.outputs.digest }}
+      APPLICATION_IMAGE: ${{'{'}}{ vars.P6M_ARTIFACTORY_HOSTNAME }}/${{'{'}}{ github.repository_owner }}-docker-local/applications/${{'{'}}{ github.event.repository.name }}-server@${{'{'}}{ needs.build_and_deploy.outputs.digest }}
     secrets:
-      SUBGRAPH_PULL_TOKEN: ${{'{'}}{ secrets.SUBGRAPH_PULL_TOKEN }}
-      REPOSITORY_PUSH_TOKEN: ${{'{'}}{ secrets.UPDATE_MANIFEST_TOKEN }}
-      ARTIFACTORY_USERNAME: ${{'{'}}{ secrets.ARTIFACTORY_USERNAME }}
-      ARTIFACTORY_IDENTITY_TOKEN: ${{'{'}}{ secrets.ARTIFACTORY_IDENTITY_TOKEN }}
-      PIPELINE_TRIGGER_TOKEN: ${{'{'}}{ secrets.UPDATE_MANIFEST_TOKEN }}
+      SUBGRAPH_PULL_TOKEN: ${{'{'}}{ secrets.P6M_SUBGRAPH_PULL_TOKEN }}
+      REPOSITORY_PUSH_TOKEN: ${{'{'}}{ secrets.P6M_UPDATE_MANIFEST_TOKEN }}
+      ARTIFACTORY_USERNAME: ${{'{'}}{ secrets.P6M_ARTIFACTORY_USERNAME }}
+      ARTIFACTORY_IDENTITY_TOKEN: ${{'{'}}{ secrets.P6M_ARTIFACTORY_IDENTITY_TOKEN }}
+      PIPELINE_TRIGGER_TOKEN: ${{'{'}}{ secrets.P6M_UPDATE_MANIFEST_TOKEN }}
