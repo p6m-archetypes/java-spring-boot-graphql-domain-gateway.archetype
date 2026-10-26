@@ -389,7 +389,6 @@ mvn spring-boot:run -Pprod
 - **[Java Spring Boot gRPC Service](../java-spring-boot-grpc-service.archetype)** - Backend gRPC service for this gateway to aggregate
 - **[.NET GraphQL Service](../dotnet-graphql-service-basic.archetype)** - .NET GraphQL service alternative
 - **[Python GraphQL Service](../python-graphql-service-uv-basic.archetype)** - Python GraphQL service for comparison
-- **[TypeScript Next.js](../typescript-nextjs-basic.archetype)** - Frontend application that can consume this gateway
 
 ## 🤝 Contributing
 
